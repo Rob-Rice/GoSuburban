@@ -1,0 +1,114 @@
+<div class="hover-image-wrapper">
+{% for item in module.field_group %}
+  <div class="hover-image-container">
+	{% set href = item.link_field.url.href %}
+	{% if item.link_field.url.type is equalto "EMAIL_ADDRESS" %}
+		{% set href = "mailto:" + href %}
+	{% endif %}
+	<a href="{{ href }}"
+		{% if item.link_field.open_in_new_tab %}target="_blank"{% endif %}
+		{% if item.link_field.rel %}rel="{{ item.link_field.rel }}"{% endif %}
+		>
+		  <div class="main-image">
+        	{% if item.image_field.src %}
+		{% set sizeAttrs = 'width="{{ item.image_field.width }}" height="{{ item.image_field.height }}"' %}
+		{% if item.image_field.size_type == 'auto' %}
+			{% set sizeAttrs = 'width="{{ item.image_field.width }}" height="{{ item.image_field.height }}" style="max-width: 100%; height: auto;"' %}
+		{% elif item.image_field.size_type == 'auto_custom_max' %}
+			{% set sizeAttrs = 'width="{{ item.image_field.max_width }}" height="{{ item.image_field.max_height }}" style="max-width: 100%; height: auto;"' %}
+		{% endif %}
+		 {% set loadingAttr = item.image_field.loading != 'disabled' ? 'loading="{{ item.image_field.loading }}"' : '' %}
+		<img src="{{ item.image_field.src }}" alt="{{ item.image_field.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+	{% endif %}
+    </div>
+        <div class="hover-image">
+	{% if item.hover_image.src %}
+		{% set sizeAttrs = 'width="{{ item.hover_image.width }}" height="{{ item.hover_image.height }}"' %}
+		{% if item.hover_image.size_type == 'auto' %}
+			{% set sizeAttrs = 'width="{{ item.hover_image.width }}" height="{{ item.hover_image.height }}" style="max-width: 100%; height: auto;"' %}
+		{% elif item.hover_image.size_type == 'auto_custom_max' %}
+			{% set sizeAttrs = 'width="{{ item.hover_image.max_width }}" height="{{ item.hover_image.max_height }}" style="max-width: 100%; height: auto;"' %}
+		{% endif %}
+		 {% set loadingAttr = item.hover_image.loading != 'disabled' ? 'loading="{{ item.hover_image.loading }}"' : '' %}
+		<img src="{{ item.hover_image.src }}" alt="{{ item.hover_image.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+          {% endif %}</div>
+	</a>
+    <div class="desc-text">
+    	{% inline_rich_text field="richtext_field" value="{{ item.richtext_field }}" %}      
+    </div>
+  </div>
+{% endfor %}
+</div>
+
+<style>
+  
+  .hover-image-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    justify-content: center;
+    margin: -6% 0;
+  }
+
+  .hover-image-container {
+/*     position: relative; */
+  }
+  
+  .hover-image-container {
+    transform: scale(0.3);
+  }
+  
+  .hover-image-container img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .main-image {
+    opacity: 1;
+    transition: all .25s ease-out;
+  }
+  
+  .main-image:hover {
+/*     opacity: 0; */
+  }
+
+  .hover-image {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    transition: all .25s ease-out;
+  }
+  
+  .hover-image:hover{
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 1;
+    transform: scale(1.05)
+  }
+
+  .desc-text {
+    padding: 5% 0;
+  }
+  
+  @media(max-width: 1420px) {
+    .hover-image-container {
+      height: 500px;
+      transform: scale(0.5);
+    }
+  }
+    
+  @media(max-width: 1092px) {
+    .hover-image-wrapper {
+      grid-template-columns: repeat(2, auto);
+    }
+    .hover-image-container {
+      height: 250px;
+      transform: scale(0.5);
+    }
+    .hover-image-wrapper {
+      padding-bottom: 25%;
+    }
+  }
+  
+</style>
